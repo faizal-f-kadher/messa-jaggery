@@ -1,0 +1,14 @@
+{
+  "name": "messa-marayoor-jaggery",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Messa Marayoor Jaggery website — vanilla HTML, JS and Tailwind CSS",
+  "scripts": {
+    "dev": "tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --watch",
+    "build": "tailwindcss -i ./assets/css/input.css -o ./assets/css/styles.css --minify"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

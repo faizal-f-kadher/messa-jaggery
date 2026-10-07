@@ -1,0 +1,369 @@
+@import "tailwindcss";
+
+/* Barlow (SIL Open Font Licence), self-hosted: the hero words */
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-300.woff2") format("woff2"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Barlow"; src: url("../fonts/barlow-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
+
+@source "../../*.html";
+@source "../js/*.js";
+
+/* ------------------------------------------------------------------
+   Design tokens
+   White is the canvas. Paper is the one soft secondary tone.
+   Night (dark) is reserved for the Process section and the footer.
+------------------------------------------------------------------- */
+@theme {
+  --color-white: #ffffff;
+  --color-paper: #faf6ef;
+  --color-cream: #f1e7d6;
+  --color-line: #e8dfd0;
+  --color-line-strong: #d6c8b2;
+  --color-ink: #1e1712;
+  --color-muted: #5c4f46;
+  --color-brown: #4a2a17;
+  --color-night: #24160e;
+  --color-night-line: #4a3a2f;
+  --color-amber: #9e5514;
+  --color-amber-dark: #7f430f;
+  --color-amber-soft: #e3a65a;
+  --color-leaf: #3e5236;
+  --color-error: #a3261c;
+
+  --font-display: "Gambetta", Georgia, "Times New Roman", serif;
+  --font-sans: "Switzer", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-ml: "Manjari", "Noto Sans Malayalam", sans-serif;
+  --font-hero: "Barlow", "DIN Alternate", "Helvetica Neue", Arial, sans-serif;
+
+  --radius-xs: 2px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (min-width: 64rem) {
+    body { font-size: 1.0625rem; }
+  }
+  img { display: block; max-width: 100%; }
+  ::selection { background: var(--color-brown); color: var(--color-white); }
+  :focus-visible { outline: 2px solid var(--color-amber); outline-offset: 3px; }
+  html.menu-open, html.drawer-open { overflow: hidden; }
+}
+
+@layer components {
+  /* Layout */
+  .wrap {
+    width: 100%;
+    max-width: 75rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 48rem) { .wrap { padding-inline: 2rem; } }
+
+  .section { padding-block: 4rem; }
+  @media (min-width: 48rem) { .section { padding-block: 6rem; } }
+  @media (min-width: 64rem) { .section { padding-block: 7.5rem; } }
+
+  /* Type scale: two families, three weights total */
+  .display-1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.5rem, 5.4vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+  .display-2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 4.6vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .display-3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    line-height: 1.2;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    color: var(--color-leaf);
+  }
+  .lead { font-size: 1.0625rem; color: var(--color-muted); max-width: 34rem; }
+  @media (min-width: 64rem) { .lead { font-size: 1.1875rem; } }
+  .ml { font-family: var(--font-ml); }
+
+  /* Buttons and links (2px radius, no pills, no shadows) */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.375rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-xs);
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out;
+  }
+  .btn-primary { background: var(--color-amber); color: var(--color-white); }
+  .btn-outline { border-color: var(--color-ink); color: var(--color-ink); background: transparent; }
+  .btn-light { border-color: var(--color-white); color: var(--color-white); background: transparent; }
+  .btn-block { width: 100%; }
+  @media (hover: hover) {
+    .btn-primary:hover { background: var(--color-amber-dark); }
+    .btn-outline:hover { background: var(--color-ink); color: var(--color-white); }
+    .btn-light:hover { background: var(--color-white); color: var(--color-night); }
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+  }
+  @media (hover: hover) { .text-link:hover { color: var(--color-amber); } }
+
+  /* Header */
+  .site-header { transition: transform 240ms ease-out, background-color 240ms ease-out, border-color 240ms ease-out, color 240ms ease-out; }
+
+  /* Header overlay styles live outside the layers at the end of this file, so they beat utility classes */
+  .site-header.is-hidden { transform: translateY(-100%); }
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  @media (hover: hover) { .nav-link:hover { color: var(--color-amber); } }
+
+  /* Mobile menu */
+  .mobile-menu { transform: translateX(100%); transition: transform 260ms ease-out, visibility 260ms; visibility: hidden; }
+  .mobile-menu.is-open { transform: none; visibility: visible; }
+
+  /* Parallax: the layer is taller than its frame so movement never shows an edge */
+  .parallax-frame { position: relative; overflow: hidden; background: var(--color-cream); }
+  .parallax-layer { position: absolute; inset: -12% 0; will-change: transform; }
+  .parallax-layer img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Single, consistent reveal */
+  html.js .reveal { opacity: 0; transform: translateY(16px); transition: opacity 400ms ease-out, transform 400ms ease-out; }
+  html.js .reveal.is-visible { opacity: 1; transform: none; }
+
+  /* Process (desktop sticky visual) */
+  .process-img { opacity: 0; transition: opacity 400ms ease-out; }
+  .process-img.is-active { opacity: 1; }
+  @media (min-width: 64rem) {
+    .process-step { opacity: 0.5; transition: opacity 300ms ease-out; }
+    .process-step.is-active { opacity: 1; }
+  }
+
+  /* Forms: full borders read as fields; 2px radius */
+  .field-label { display: block; margin-bottom: 0.375rem; font-size: 0.875rem; font-weight: 500; }
+  .field-input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xs);
+    background: var(--color-white);
+    color: var(--color-ink);
+    font-size: 1rem;
+  }
+  .field-input:focus { outline: 2px solid var(--color-amber); outline-offset: 0; border-color: var(--color-amber); }
+  .field-input[aria-invalid="true"] { border-color: var(--color-error); }
+  .field-error { margin-top: 0.375rem; font-size: 0.8125rem; color: var(--color-error); }
+
+  /* Drawer */
+  .drawer { transform: translateX(100%); transition: transform 280ms ease-out, visibility 280ms; visibility: hidden; }
+  .drawer.is-open { transform: none; visibility: visible; }
+  .scrim { opacity: 0; visibility: hidden; transition: opacity 240ms ease-out, visibility 240ms; }
+  .scrim.is-open { opacity: 1; visibility: visible; }
+
+  .qty-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xs);
+    background: var(--color-white);
+    cursor: pointer;
+  }
+
+  /* Pack-size choice */
+  .size-option input { position: absolute; opacity: 0; pointer-events: none; }
+  .size-option span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+  }
+  .size-option input:checked + span { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-white); }
+  .size-option input:focus-visible + span { outline: 2px solid var(--color-amber); outline-offset: 2px; }
+
+  /* ---------- Hero: "text behind the hills" ----------
+     The stage keeps the photo's 3:2 shape and covers the viewport (like object-fit: cover),
+     so the photo, the words (SVG in photo coordinates) and the cut-out front hills always line up. */
+  /* The hero is a size container so the stage can be measured against it (cq units ignore the scrollbar). */
+  .hero { container-type: size; --stage-h: max(100cqw / 1.5, 100cqh); }
+  .hero-stage {
+    position: absolute;
+    left: 50%;
+    width: calc(var(--stage-h) * 1.5);
+    height: var(--stage-h);
+    translate: -50% 0;
+    /* Normally centred vertically. On wide, short laptop screens the photo's top would be cropped and
+       MARAYOOR would crowd the nav, so the stage drops down just enough to keep the word 10.5rem from the top
+       (MARAYOOR's cap line sits 23.25% down the stage, after the layers' 1.045 scale). Never leaves a gap above. */
+    top: min(0px, max((100cqh - var(--stage-h)) / 2, 10.5rem - var(--stage-h) * 0.2325));
+  }
+  .hero-stage > * { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* Every layer is scaled the same tiny amount, so small parallax shifts never show an edge */
+  .hero-layer { scale: 1.045; will-change: translate; }
+  .hero-layer > img, .hero-layer > svg { position: absolute; left: 0; width: 100%; }
+  .hero-layer > img:first-child:not(.hero-mist):not(.hero-front), .hero-layer > svg { top: 0; height: 100%; }
+  .hero-mist { top: 37.5%; height: 37.5%; opacity: 0.82; animation: hero-mist-drift 18s ease-in-out infinite alternate; }
+  .hero-front { bottom: 0; height: auto; }                      /* cut-out starts 34% down the photo */
+  .hero-front-base { position: absolute; top: 100%; left: 0; right: 0; height: 40%; background: #1b2618; }
+  .hero-sun {
+    pointer-events: none;
+    background: radial-gradient(38% 34% at 11% 15%, rgba(255, 220, 186, 0.42) 0%, rgba(255, 220, 186, 0) 72%);
+    mix-blend-mode: screen;
+  }
+  .hero-words text { font-family: var(--font-hero); }
+  .hero-words .w-light { font-weight: 300; fill: url(#word-dark); }   /* deep molasses on the bright sky */
+  .hero-words .w-bold { font-weight: 800; fill: url(#word-light); }   /* white, softening into the haze */
+  @keyframes hero-mist-drift { from { transform: translateX(-1.4%); } to { transform: translateX(1.4%); } }
+  /* Two word layouts: wide screens follow the mockup; tall phone screens get a compact, centred stack */
+  .hero-words-narrow { display: none; }
+  @media (max-aspect-ratio: 1/1) {
+    .hero-words-wide { display: none; }
+    .hero-words-narrow { display: block; }
+  }
+  /* Phones: words placed in screen space, spanning the content column (1.25rem margins), resting on the ridge.
+     Divided by the layer's 1.045 scale so the margins land exactly on 1.25rem. */
+  .hero-words-phone { display: none; }
+  .hero-layer > svg.hero-words-phone {
+    top: auto;
+    bottom: 41.5%;        /* JAGGERY rests on the ridge: the mountain just clips the corner of the Y */
+    left: 50%;
+    width: calc((100vw - 2.5rem) / 1.045);
+    height: auto;
+    translate: -50% 0;
+    overflow: visible;
+  }
+  @media (max-aspect-ratio: 1/1) and (max-width: 47.99rem) {
+    .hero-words-narrow { display: none; }
+    .hero-words-phone { display: block; }
+  }
+  /* Bottom band so the copy and buttons read clearly over the forest and morning mist */
+  .hero-foot-shade { background: linear-gradient(0deg, rgba(10, 16, 9, 0.72) 0%, rgba(10, 16, 9, 0.38) 45%, rgba(10, 16, 9, 0) 100%); }
+
+  /* ---------- Hero entrance (plays once on load) ---------- */
+  .hero-zoom { animation: hero-zoom 2.6s cubic-bezier(.2,.7,.2,1) both; transform-origin: 50% 60%; }
+  .hero-rise, .hero-drop { transform-box: fill-box; }
+  .hero-rise { animation: hero-rise-behind 1.5s cubic-bezier(.2,.75,.2,1) .35s both; }
+  .hero-drop { animation: hero-drop 1.2s cubic-bezier(.2,.75,.2,1) .9s both; }
+  .hero-fade { animation: hero-fade .8s ease-out 1.25s both; }
+  .hero-fade-2 { animation-delay: 1.4s; }
+  .hero-cue { animation: hero-fade .8s ease-out 1.8s both; }
+  .hero-cue-line i { animation: hero-cue 1.8s cubic-bezier(.65,0,.35,1) 2.4s infinite; }
+  @keyframes hero-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+  /* JAGGERY climbs up from behind the ridge */
+  @keyframes hero-rise-behind { from { transform: translateY(42%); opacity: 0; } 30% { opacity: 1; } to { transform: none; opacity: 1; } }
+  @keyframes hero-drop { from { transform: translateY(-14%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes hero-fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes hero-cue { 0% { transform: translateY(-100%); } 60%, 100% { transform: translateY(260%); } }
+
+  /* ---------- Reviews: continuous glide ---------- */
+  .reviews-track { padding-inline: 1.25rem; will-change: transform; touch-action: pan-y; user-select: none; cursor: grab; }
+  @media (min-width: 48rem) { .reviews-track { padding-inline: 2rem; } }
+  @media (min-width: 64rem) { .reviews-track { padding-inline: max(2rem, calc((100vw - 75rem) / 2 + 2rem)); } }
+  .reviews-track:focus-visible { outline-offset: -2px; }
+  .reviews-track.is-dragging { cursor: grabbing; }
+  /* Card widths: most of the screen on phones (the next card peeks in), fixed widths above */
+  .review-card { width: min(82vw, 21rem); }
+  @media (min-width: 40rem) { .review-card { width: 20rem; } }
+  @media (min-width: 64rem) { .review-card { width: 24rem; } }
+  .review-ctl {
+    display: inline-grid; place-items: center; height: 2.75rem;
+    border: 1px solid var(--color-line-strong); border-radius: var(--radius-xs); background: var(--color-white); cursor: pointer;
+    transition: border-color 160ms ease-out, background-color 160ms ease-out;
+  }
+  @media (hover: hover) { .review-ctl:hover { border-color: var(--color-ink); } }
+
+  /* Flow line draws itself once the section is in view */
+  .flow-path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.2s cubic-bezier(.65,0,.35,1); }
+  .flow-path-2 { transition-delay: .3s; }
+  .flow-drops circle { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0); transition: opacity .4s ease-out, transform .5s cubic-bezier(.3,1.4,.5,1); }
+  .flow-drops circle:nth-child(1) { transition-delay: 1s; }
+  .flow-drops circle:nth-child(2) { transition-delay: 1.5s; }
+  .flow-drops circle:nth-child(3) { transition-delay: 1.9s; }
+  [data-flow].is-drawn .flow-path { stroke-dashoffset: 0; }
+  [data-flow].is-drawn .flow-drops circle { opacity: 1; transform: none; }
+
+  .toast { transform: translateY(calc(100% + 2rem)); visibility: hidden; transition: transform 240ms ease-out, visibility 240ms; }
+  .toast.is-visible { transform: none; visibility: visible; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
+  html.js .reveal { opacity: 1; transform: none; }
+  .parallax-layer { transform: none !important; }
+}
+
+/* ---------- Home page header over the hero (unlayered so it overrides bg-white / border utilities) ----------
+   The top of the hero photo is bright sky, so the floating header uses dark text. */
+html.js .site-header.is-overlay { background: transparent; border-color: transparent; color: #2a1b12; }
+@media (hover: hover) { html.js .site-header.is-overlay .nav-link:hover { color: var(--color-amber-dark); } }
+
+/* Contact: clear space between the divider line and the "Visit the unit" row (unlayered so nothing overrides it) */
+.visit-row { padding-top: 2.5rem; }
+@media (min-width: 64rem) { .visit-row { padding-top: 3.5rem; } }
+
+/* ---------- Header navigation ---------- */
+.site-header nav .nav-link { position: relative; padding-inline: 0.9rem; }
+.site-header nav .nav-link::after {
+  content: ""; position: absolute; left: 0.9rem; right: 0.9rem; bottom: 0.55rem; height: 1.5px;
+  background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 220ms ease-out;
+}
+@media (hover: hover) { .site-header nav .nav-link:hover::after { transform: scaleX(1); } }
+.site-header nav .nav-link:focus-visible::after { transform: scaleX(1); }
+.nav-cta {
+  display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-xs); background: var(--color-amber); color: var(--color-white);
+  font-size: 0.9375rem; font-weight: 500; line-height: 1.2; text-decoration: none;
+  transition: background-color 160ms ease-out;
+}
+@media (hover: hover) { .nav-cta:hover { background: var(--color-amber-dark); } }
+@media (max-width: 63.99rem) { .site-header [data-menu-toggle] { padding-inline: 0.75rem; } }
